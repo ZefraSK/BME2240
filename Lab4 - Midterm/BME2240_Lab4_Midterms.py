@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 
 def equation(u_2,u_1):
     #Adjust these until they match
-    g = -9.8 #m/s^2
-    c = .001 #kg [.001]
-    k = 25 #n/m [45]
-    m = .3 #kg [.7]
+    g = -9.81 #m/s^2
+    c = .023#.002 #kg [.001]
+    k = 45.2#43 #n/m [45]
+    m = .7 #kg [.7]
     
     #Equation Calculated from step 5
-    u_2P = g - (c/m)*u_2 - (k/m)*u_1
+    u_2P = m*g - (c/m)*u_2 - (k/m)*u_1
 
     return u_2P
 
@@ -34,7 +34,7 @@ def rk4Method(xi,xf,u_2,u_1):
     #initialize Variables
     xi = xi #Initial range given [0 seconds]
     xf = xf #Final range give [60 seconds]
-    n = 600 #Number of steps
+    n = 6000 #Number of steps
     h = (xf-xi)/n #Solving for StepSize
 
     xpoints = np.arange(xi,xf,h) #Points on X-Axis
@@ -46,12 +46,14 @@ def rk4Method(xi,xf,u_2,u_1):
     k2_l = []
     k3_l = []
     k4_l = []
+    newXPoints = []
     
     #Iterating through points of x
     for i in xpoints:
         #Adding (u_1,u_2) to there respected list
         u_1_plot.append(u_1)
         u_2_rk4.append(u_2)
+        newXPoints.append(i+.5*h)
 
         #Solving for K-Values
         m1 = h*u_2
@@ -98,9 +100,10 @@ def rk4Method(xi,xf,u_2,u_1):
     print('\n' + 'Phi: ')
     print(phi_l)
     '''
+    print(u_1_plot)
 
     #Plotting all X_values and y_RK4 values
-    plt.plot(xpoints,u_1_plot,color='r',label='RK4 Analysis')
+    plt.plot(newXPoints,u_1_plot,color='r',label='RK4 Analysis')
     plt.plot(t,l,color='g',label='Measured')
     plt.xlabel('Time (s)')
     plt.ylabel('Height (m)')
@@ -110,4 +113,4 @@ def rk4Method(xi,xf,u_2,u_1):
 
     print('Finished Solving RK4!')
 
-rk4Method(0,60,0,0) # (leftbound,  rightbound,  stepsize,  initial u_2,  initial u_1)
+rk4Method(0,60,0,0) # (leftbound,  rightbound,  initial u_2,  initial u_1)
